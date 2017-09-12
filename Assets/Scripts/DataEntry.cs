@@ -19,15 +19,17 @@ public class DataEntry : MonoBehaviour {
 					gt.text = gt.text.Substring (0, gt.text.Length - 1);
 				}
 			} else if ((c == '\n') || (c == '\r')) { // enter/return
-				print ("User entered their name: " + gt.text);
+				print ("Entered Guess: " + gt.text);
 				bool hit = false;
-				if (gt.text == "42") {
+
+
+				if (GameController.instance().checkResult(gt.text)) {
 					hit = true;
 				}
 				gt.text = "";
 
-				GunControl gunScript = GameObject.Find("Main Camera").GetComponent<GunControl>();
-				gunScript.RequestFire (hit);
+				GunControl gunControl = GameObject.Find("Main Camera").GetComponent<GunControl>();
+				gunControl.RequestFire (hit);
 
 			} else {
 				gt.text += c;

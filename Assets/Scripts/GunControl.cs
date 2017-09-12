@@ -5,14 +5,12 @@ using UnityEngine;
 public class GunControl : MonoBehaviour {
 	public Rigidbody projectile;
 	public Transform shotPos;
-	public float shotForce=1000f;
-	public Transform hitTarget;
-	public Transform missTarget;
+	public float shotForce=100f;
 
 	private bool firePending = false;
 	private bool onTarget = false;
 
-	void Update () {
+	void FixedUpdate () {
 		if (firePending) {
 			Fire ();
 			firePending = false;
@@ -20,15 +18,19 @@ public class GunControl : MonoBehaviour {
 	}
 	void Fire() {
 		Rigidbody shot = Instantiate(projectile, shotPos.position, shotPos.rotation) as Rigidbody;
+
+		GameObject target = GameController.instance ().currentTarget;
+		Transform aim; 
 		if (onTarget) {
-			transform.LookAt (hitTarget);
-			shot.transform.LookAt (hitTarget);
+			aim = target.transform.Find ("Bullseye").transform;
 		} else {
-			transform.LookAt (missTarget);
-			shot.transform.LookAt (missTarget);
+			aim = target.transform.Find ("Miss").transform;		
 		}
+
+		transform.LookAt (aim);
+		shot.transform.LookAt (aim);
 			
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 10; i++) {
 			shot.AddForce (shot.transform.forward * shotForce);
 		}
 	}
